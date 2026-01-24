@@ -2,7 +2,7 @@
 
 ## Goal
 
-Add functionality to `jira_stories_export_script` to update a Google Spreadsheet with the Jira CSV output data, fully replacing existing spreadsheet data. Use gspread batch techniques to minimize API requests.
+Add functionality to `jira_stories_export_script` to update a Google Spreadsheet with the Jira CSV output data, fully replacing existing spreadsheet data (but not formatting, frozen rows, etc.). Use gspread batch techniques to minimize API requests.
 
 ---
 
@@ -121,9 +121,13 @@ After `write_csv()` call:
 ### Step 6: Add tests
 
 Create `tests/test_gsheet_client.py`:
+- First only use mocks when really needed. They're ok, but we don't want to test-the-mocks to an unreasonable degree.
 - Test `issues_to_rows()` produces correct structure
-- Test configuration loading with mocked env vars
-- (Optional) Mock gspread client for update function tests
+- Add tests that perform these checks:
+  - `Checks load_gsheet_config reads and validates env vars`
+  - `Checks issues_to_rows includes header and stringifies fields`
+  - `Checks update_spreadsheet clears then updates from A1`
+- Test configuration loading 
 
 ---
 
