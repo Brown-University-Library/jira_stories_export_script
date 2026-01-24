@@ -1,5 +1,7 @@
 # PLAN: Refactor `main.py` into thin orchestrator + `lib/` modules
 
+Review `jira_stories_export_script/AGENTS.md` to understand coding preferences.
+
 ## Goal
 
 Refactor `jira_stories_export_script/main.py` so it contains only:
@@ -101,7 +103,7 @@ Keep `jira_stories_export_script/main.py` as a thin orchestrator.
 
 Because tests currently import and call multiple helper functions from `main.py`, choose **one** of these approaches during implementation:
 
-### Option A (preferred): Update tests to import from `lib/`
+### Update tests to import from `lib/`
 
 - Update `tests/test_main.py` to import the new modules, e.g.:
   - `from lib.config import load_config, JiraConfig`
@@ -114,19 +116,6 @@ Pros:
 
 Cons:
 - Requires changing test imports/patch paths.
-
-### Option B: Keep backwards-compatibility re-exports in `main.py`
-
-- `main.py` imports helper symbols from `lib.*` and re-exports them so existing tests keep working.
-
-Pros:
-- Smaller test churn.
-
-Cons:
-- Conflicts with the goal “`main.py` only contains `main()` and directly-called-by-`main()` functions”.
-  - Re-exporting many helpers is effectively keeping helpers in `main.py`’s public surface.
-
-Recommendation: **Option A**.
 
 ## Implementation plan (future work)
 
@@ -150,7 +139,7 @@ Recommendation: **Option A**.
    - Add at most 1-2 thin orchestration helpers directly called by `main()` if it improves readability.
    - Otherwise, `main()` can call into `lib.*` directly.
 
-6. Update tests (if following Option A)
+6. Update tests 
    - Update imports to reference `lib.*` modules.
    - Update patch targets:
      - `patch.object(main, 'jira_get', ...)` becomes patching `lib.jira_client.jira_get`.
@@ -175,6 +164,7 @@ Recommendation: **Option A**.
 If picking this up in a fresh session:
 
 1. Read:
+   - `jira_stories_export_script/AGENTS.md` (coding preferences)
    - `jira_stories_export_script/main.py`
    - `jira_stories_export_script/tests/test_main.py`
    - `jira_stories_export_script/ruff.toml` (style constraints)
@@ -182,7 +172,4 @@ If picking this up in a fresh session:
 2. Confirm current test runner:
    - `uv run ./run_tests.py`
 
-3. Decide compatibility strategy:
-   - Prefer updating tests to import from `lib/` (Option A).
-
-4. Execute the implementation plan steps 1–7.
+3. Execute the implementation plan steps 1–7.
