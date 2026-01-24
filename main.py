@@ -33,7 +33,7 @@ def load_config() -> JiraConfig:
     os_email: str = _get_env('JIRA_EMAIL')
     os_api_token: str = _get_env('JIRA_API_TOKEN')
     os_board_id: int = int(_get_env('JIRA_BOARD_ID'))
-    os_out_csv_path: Path = Path(os.getenv('JIRA_OUT_CSV_PATH', 'sprint_export.csv')).expanduser().resolve()
+    os_out_csv_path: Path = Path(_get_env('JIRA_OUT_CSV_PATH')).expanduser().resolve()  # expanduser() resolves `~` paths
 
     return JiraConfig(
         base_url=os_base_url,
