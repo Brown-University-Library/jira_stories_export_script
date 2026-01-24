@@ -1,7 +1,16 @@
 # PLAN: Refactor `tests/test_main.py`
 
+## Before you start
+- Review `jira_stories_export_script/AGENTS.md` for repo-specific coding and testing preferences (Python version, `uv` usage, unittest conventions, style rules).
+
 ## Context
 `tests/test_main.py` originated when most logic lived in `main.py`. The production code is now split across `lib/` modules, but the tests still live in a single file named as if it targets `main`.
+
+Notes that may be useful in a new work-session:
+- This project targets Python 3.12 and uses `uv`.
+- Run tests via: `uv run ./run_tests.py` (from the project root).
+- Test framework is the standard library `unittest` (not pytest).
+- Test discovery expects filenames starting with `test_` under `jira_stories_export_script/tests/`.
 
 Current `lib/` layout:
 - `lib/config.py`
