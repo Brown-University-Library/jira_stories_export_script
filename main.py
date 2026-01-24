@@ -150,8 +150,11 @@ def write_csv(out_path: Path, issues: list[dict]) -> None:
 
 
 def main() -> None:
+    ## config -------------------------------------------------------
     load_dotenv()
     cfg: JiraConfig = load_config()
+
+    ## export jira data ---------------------------------------------
     headers: dict[str, str] = {
         'Authorization': build_auth_header(cfg.email, cfg.api_token),
         'Accept': 'application/json',
@@ -163,6 +166,9 @@ def main() -> None:
         write_csv(cfg.out_csv_path, issues)
 
     print(f'Wrote {len(issues)} issues to {cfg.out_csv_path}')
+
+    ## update google sheet ------------------------------------------
+    ## TODO
 
 
 if __name__ == '__main__':
