@@ -6,6 +6,12 @@ Usage examples:
     (file) uv run ./run_tests.py tests.test_main
     (class) uv run ./run_tests.py tests.test_main.TestMain
     (method) uv run ./run_tests.py tests.test_main.TestMain.test_load_config_reads_and_normalizes_env
+
+    Also takes a -v or --verbose flag to increase verbosity to level 2, which yields:
+    name of test being run
+    the test's docstring ("Checks...) ... ...and the result (ok)
+    etc...
+
 """
 
 import argparse
@@ -21,6 +27,12 @@ def main() -> None:
         default='tests',
         help='Optional test module/class/method, or a directory to discover tests from.',
     )
+    parser.add_argument(
+        '-v',
+        '--verbose',
+        action='store_true',
+        help='Increase verbosity to level 2.',
+    )
     args = parser.parse_args()
 
     if args.test_path.endswith('.py'):
@@ -31,7 +43,8 @@ def main() -> None:
     else:
         suite = unittest.defaultTestLoader.loadTestsFromName(args.test_path)
 
-    runner = unittest.TextTestRunner(verbosity=2)
+    verbosity = 2 if args.verbose else 1
+    runner = unittest.TextTestRunner(verbosity=verbosity)
     result = runner.run(suite)
     sys.exit(0 if result.wasSuccessful() else 1)
 
