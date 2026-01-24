@@ -1,7 +1,7 @@
 import httpx
 from dotenv import load_dotenv
 
-from lib.config import GSheetConfig, JiraConfig, load_config, load_gsheet_config
+from lib.config import GSheetConfig, JiraConfig, load_gsheet_config, load_jira_config
 from lib.export_csv import issues_to_rows, write_csv
 from lib.gsheet_client import get_gspread_client, update_spreadsheet
 from lib.jira_client import build_auth_header, fetch_sprint_issues, get_active_sprint_id
@@ -10,7 +10,7 @@ from lib.jira_client import build_auth_header, fetch_sprint_issues, get_active_s
 def main() -> None:
     ## config -------------------------------------------------------
     load_dotenv()
-    cfg: JiraConfig = load_config()
+    cfg: JiraConfig = load_jira_config()
 
     ## export jira data ---------------------------------------------
     headers: dict[str, str] = {

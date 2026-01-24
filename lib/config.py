@@ -31,7 +31,7 @@ def _get_env(name: str) -> str:
     return value.strip()
 
 
-def load_config() -> JiraConfig:
+def load_jira_config() -> JiraConfig:
     """
     Loads Jira configuration from environment variables.
     """

@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from lib.config import load_config
+from lib.config import load_jira_config
 
 
 class TestConfig(unittest.TestCase):
@@ -25,7 +25,7 @@ class TestConfig(unittest.TestCase):
                 },
                 clear=True,
             ):
-                cfg = load_config()
+                cfg = load_jira_config()
 
         self.assertEqual(cfg.base_url, 'https://example.atlassian.net')
         self.assertEqual(cfg.email, 'user@example.com')
