@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 from dataclasses import dataclass
 from pathlib import Path
@@ -12,6 +13,12 @@ class JiraConfig:
     api_token: str
     board_id: int
     out_csv_path: Path
+
+
+@dataclass(frozen=True)
+class GSheetConfig:
+    credentials: dict
+    spreadsheet_id: str
 
 
 def _get_env(name: str) -> str:
@@ -40,4 +47,23 @@ def load_config() -> JiraConfig:
         api_token=os_api_token,
         board_id=os_board_id,
         out_csv_path=os_out_csv_path,
+    )
+
+
+def load_gsheet_config() -> GSheetConfig:
+    """
+    Loads Google Sheets configuration from environment variables.
+    """
+    credentials_json: str = _get_env('GSHEET_CREDENTIALS_JSON')
+    spreadsheet_id: str = _get_env('GSHEET_SPREADSHEET_ID')
+
+    ## parse credentials JSON
+    try:
+        credentials_dict: dict = json.loads(credentials_json)
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f'Invalid JSON in GSHEET_CREDENTIALS_JSON: {e}') from e
+
+    return GSheetConfig(
+        credentials=credentials_dict,
+        spreadsheet_id=spreadsheet_id,
     )

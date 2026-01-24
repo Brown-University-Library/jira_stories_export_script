@@ -27,7 +27,7 @@ Key points from `AGENTS.md`:
 
 The `.env` file (located at parent directory level) contains:
 - `GSHEET_CREDENTIALS_JSON` — JSON string containing Google service account credentials
-- `GSHEET_SPREADSHEET_ID` — Target spreadsheet ID (e.g., `1EsJ97ShA_qr0vV-mbiXKGBR-X-ZBEbGl0qwYt3mYIQM`)
+- `GSHEET_SPREADSHEET_ID` — Target spreadsheet ID (e.g., `some-id-here`)
 - `LOG_LEVEL` — Logging level (optional, defaults to `INFO`)
 
 ### Existing Code Structure
@@ -163,4 +163,3 @@ uv run ./run_tests.py test_gsheet_client
 
 - The `gsheet_experimentation_script/` directory is **temporary** and will be removed — do not depend on it for persistent code
 - The spreadsheet should already be configured to accept programmatic requests (shared with service account email)
-- Service account email: `sa-warc-gsheets-writer@project-its-gsheet-connector.iam.gserviceaccount.com`

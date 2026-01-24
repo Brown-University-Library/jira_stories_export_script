@@ -20,6 +20,41 @@ def safe_field(fields: dict, path: list[str]) -> str:
     return str(value)
 
 
+def issues_to_rows(issues: list[dict]) -> list[list[str]]:
+    """
+    Converts Jira issues to a 2D list of strings for spreadsheet update.
+    """
+    ## header row
+    header: list[str] = [
+        'key',
+        'summary',
+        'status',
+        'assignee',
+        'reporter',
+        'issuetype',
+        'priority',
+        'story_points',
+    ]
+    rows: list[list[str]] = [header]
+
+    ## data rows
+    for issue in issues:
+        fields: dict = issue.get('fields', {})
+        row: list[str] = [
+            str(issue.get('key', '')),
+            safe_field(fields, ['summary']),
+            safe_field(fields, ['status', 'name']),
+            safe_field(fields, ['assignee', 'displayName']),
+            safe_field(fields, ['reporter', 'displayName']),
+            safe_field(fields, ['issuetype', 'name']),
+            safe_field(fields, ['priority', 'name']),
+            safe_field(fields, ['customfield_10016']),
+        ]
+        rows.append(row)
+
+    return rows
+
+
 def write_csv(out_path: Path, issues: list[dict]) -> None:
     """
     Writes issues to a CSV file.
