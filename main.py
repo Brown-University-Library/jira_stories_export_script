@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import httpx
+from dotenv import load_dotenv
 
 
 @dataclass(frozen=True)
@@ -157,6 +158,7 @@ def write_csv(out_path: Path, issues: list[dict]) -> None:
 
 
 def main() -> None:
+    load_dotenv()
     cfg: JiraConfig = load_config()
     headers: dict[str, str] = {
         "Authorization": build_auth_header(cfg.email, cfg.api_token),
