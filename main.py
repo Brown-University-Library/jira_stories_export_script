@@ -29,20 +29,20 @@ def _get_env(name: str) -> str:
 
 def load_config() -> JiraConfig:
     """Loads Jira configuration from environment variables."""
-    base_url: str = _get_env("JIRA_BASE_URL").rstrip("/")
-    email: str = _get_env("JIRA_EMAIL")
-    api_token: str = _get_env("JIRA_API_TOKEN")
-    board_id: int = int(_get_env("JIRA_BOARD_ID"))
-    out_csv_path: Path = (
+    os_base_url: str = _get_env("JIRA_BASE_URL").rstrip("/")
+    os_email: str = _get_env("JIRA_EMAIL")
+    os_api_token: str = _get_env("JIRA_API_TOKEN")
+    os_board_id: int = int(_get_env("JIRA_BOARD_ID"))
+    os_out_csv_path: Path = (
         Path(os.getenv("JIRA_OUT_CSV_PATH", "sprint_export.csv")).expanduser().resolve()
     )
 
     return JiraConfig(
-        base_url=base_url,
-        email=email,
-        api_token=api_token,
-        board_id=board_id,
-        out_csv_path=out_csv_path,
+        base_url=os_base_url,
+        email=os_email,
+        api_token=os_api_token,
+        board_id=os_board_id,
+        out_csv_path=os_out_csv_path,
     )
 
 
@@ -168,9 +168,9 @@ def main() -> None:
     with httpx.Client(headers=headers, timeout=30.0) as client:
         sprint_id: int = get_active_sprint_id(client, cfg)
         issues: list[dict] = fetch_sprint_issues(client, cfg, sprint_id)
-        write_csv(cfg.out_csv, issues)
+        write_csv(cfg.out_csv_path, issues)
 
-    print(f"Wrote {len(issues)} issues to {cfg.out_csv}")
+    print(f"Wrote {len(issues)} issues to {cfg.out_csv_path}")
 
 
 if __name__ == "__main__":
