@@ -2,11 +2,10 @@
 Runs tests for this webap.
 
 Usage examples:
-    (all) uv run ./run_tests.py -v
-    (app) uv run ./run_tests.py -v pdf_checker_app
-    (file) uv run ./run_tests.py -v tests.test_environment_checks
-    (class) uv run ./run_tests.py -v tests.test_environment_checks.TestEnvironmentChecks
-    (method) uv run ./run_tests.py -v tests.test_environment_checks.TestEnvironmentChecks.test_check_branch_non_main_raises
+    (all) uv run ./run_tests.py
+    (file) uv run ./run_tests.py tests.test_main
+    (class) uv run ./run_tests.py tests.test_main.TestMain
+    (method) uv run ./run_tests.py tests.test_main.TestMain.test_load_config_reads_and_normalizes_env
 """
 
 import argparse
