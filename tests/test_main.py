@@ -5,7 +5,9 @@ import unittest
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-import main
+from lib.config import JiraConfig, load_config
+from lib.export_csv import write_csv
+from lib.jira_client import fetch_sprint_issues, get_active_sprint_id
 
 
 class TestMain(unittest.TestCase):
@@ -26,7 +28,7 @@ class TestMain(unittest.TestCase):
                 },
                 clear=True,
             ):
-                cfg = main.load_config()
+                cfg = load_config()
 
         self.assertEqual(cfg.base_url, 'https://example.atlassian.net')
         self.assertEqual(cfg.email, 'user@example.com')
@@ -38,7 +40,7 @@ class TestMain(unittest.TestCase):
         """
         Checks that active sprint lookup errors when Jira returns zero or many active sprints.
         """
-        cfg = main.JiraConfig(
+        cfg = JiraConfig(
             base_url='https://example.atlassian.net',
             email='user@example.com',
             api_token='token123',
@@ -47,9 +49,9 @@ class TestMain(unittest.TestCase):
         )
 
         client: Mock = Mock()
-        with patch.object(main, 'jira_get', return_value={'values': []}):
+        with patch('lib.jira_client.jira_get', return_value={'values': []}):
             with self.assertRaises(RuntimeError) as ctx:
-                main.get_active_sprint_id(client, cfg)
+                get_active_sprint_id(client, cfg)
 
         self.assertIn('Expected exactly one active sprint', str(ctx.exception))
 
@@ -57,7 +59,7 @@ class TestMain(unittest.TestCase):
         """
         Checks that sprint issue fetching continues paging until all issues are collected.
         """
-        cfg = main.JiraConfig(
+        cfg = JiraConfig(
             base_url='https://example.atlassian.net',
             email='user@example.com',
             api_token='token123',
@@ -78,8 +80,8 @@ class TestMain(unittest.TestCase):
                 return responses[0]
             return responses[1]
 
-        with patch.object(main, 'jira_get', side_effect=fake_jira_get):
-            issues = main.fetch_sprint_issues(client, cfg, sprint_id=999)
+        with patch('lib.jira_client.jira_get', side_effect=fake_jira_get):
+            issues = fetch_sprint_issues(client, cfg, sprint_id=999)
 
         self.assertEqual([i['id'] for i in issues], [1, 2, 3])
 
@@ -112,7 +114,7 @@ class TestMain(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmpdir:
             out_path = Path(tmpdir) / 'export.csv'
-            main.write_csv(out_path, issues)
+            write_csv(out_path, issues)
 
             with out_path.open('r', newline='', encoding='utf-8') as f:
                 rows = list(csv.DictReader(f))
