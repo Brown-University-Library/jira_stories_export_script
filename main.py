@@ -23,7 +23,7 @@ def main() -> None:
         issues: list[dict] = fetch_sprint_issues(client, cfg, sprint_id)
         # write_csv(cfg.out_csv_path, issues)
 
-    print(f'Wrote {len(issues)} issues to {cfg.out_csv_path}')
+    # print(f'Wrote {len(issues)} issues to {cfg.out_csv_path}')
 
     ## update google sheet ------------------------------------------
     gsheet_cfg: GSheetConfig = load_gsheet_config()
