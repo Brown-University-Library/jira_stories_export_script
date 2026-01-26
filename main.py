@@ -2,7 +2,7 @@ import httpx
 from dotenv import load_dotenv
 
 from lib.config import GSheetConfig, JiraConfig, load_gsheet_config, load_jira_config
-from lib.export_csv import issues_to_rows, write_csv
+from lib.export_csv import issues_to_rows
 from lib.gsheet_client import get_gspread_client, update_spreadsheet
 from lib.jira_client import build_auth_header, fetch_sprint_issues, get_active_sprint_id
 
@@ -21,7 +21,7 @@ def main() -> None:
     with httpx.Client(headers=headers, timeout=30.0) as client:
         sprint_id: int = get_active_sprint_id(client, cfg)
         issues: list[dict] = fetch_sprint_issues(client, cfg, sprint_id)
-        write_csv(cfg.out_csv_path, issues)
+        # write_csv(cfg.out_csv_path, issues)
 
     print(f'Wrote {len(issues)} issues to {cfg.out_csv_path}')
 
