@@ -31,7 +31,7 @@ uv run ./main.py
 The `./main.py` script manages the export. The `main()` function: 
 - loads configuration from environment variables
 - connects to Jira to fetch the active sprint's issues
-- converts the issue data into spreadsheet rows
+- converts the jira issue data into data for spreadsheet rows
 - pushes the results to Google Sheets
 
 ### Jira Integration
