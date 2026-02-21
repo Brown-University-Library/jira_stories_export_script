@@ -21,7 +21,7 @@ See `sample_dotenv.txt` for the required environment variables.
 uv run ./main.py
 ```
 
-(First time: copy `sample_dotenv.txt` to `../.env` and fill in the necessary values.)
+(First time: copy `./sample_dotenv.txt` to `../.env` and fill in the necessary values.)
 
 
 ## How It Works
