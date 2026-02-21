@@ -36,7 +36,7 @@ The `./main.py` script manages the export. The `main()` function:
 
 ### Jira Integration
 
-The script connects to Jira's Agile REST API using Basic authentication. It locates the single active sprint for a configured board, then paginates through all issues in that sprint. Expects exactly one active sprint — if zero or multiple are found, the script exits with an error.
+The script connects to Jira's Agile REST API using Basic authentication. It locates the single active sprint for a configured board, then paginates through all issues in that sprint. It expects exactly one active sprint — if zero or multiple are found, the script exits with an error.
 
 ### Google Sheets Integration
 
