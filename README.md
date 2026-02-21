@@ -1,38 +1,57 @@
 # Jira Stories Export Script
 
 ## Overview
-Brief description of what the script does: fetches issues from the active Jira sprint and exports them to a Google Spreadsheet.
+
+A small utility that pulls the current sprint's issues from Jira and populates a Google Sheet. Useful for reporting or sharing sprint status with stakeholders who don't have Jira access.
 
 
 ## Assumes
+
 - Jira is configured with a board containing sprint-stories, and a Jira API token has been created.
 - A Google Sheets Service Account has been set up, and JSON credentials have been created.
 
+See `sample_dotenv.txt` for the required environment variables.
+
 
 ## Usage
-Command to run the export script: `uv run ./main.py`.
+
+Copy `sample_dotenv.txt` to `../.env` and fill in your credentials. Then run:
+
+```bash
+uv run ./main.py
+```
 
 
 ## How It Works
 
 ### Main Flow
-Explanation of the orchestration in `main.py`: loading config, fetching Jira data, transforming to rows, updating Google Sheet.
+
+The `./main.py` script manages the export. The `main()` function: 
+- loads configuration from environment variables
+- connects to Jira to fetch the active sprint's issues
+- converts the issue data into spreadsheet rows
+- pushes the results to Google Sheets
 
 ### Jira Integration
-Details about `lib/jira_client.py`: Basic auth header construction, active sprint discovery, paginated issue fetching via Jira Agile API.
+
+The script connects to Jira's Agile REST API using Basic authentication. It locates the single active sprint for a configured board, then paginates through all issues in that sprint. Expects exactly one active sprint — if zero or multiple are found, the script exits with an error.
 
 ### Google Sheets Integration
-Details about `lib/gsheet_client.py`: Service account authentication, spreadsheet clearing and batch updating.
+
+The script authenticates as a service account and updates the first worksheet of a target spreadsheet. It clears existing content before writing fresh data, so the sheet always reflects the current sprint state.
 
 ### Data Transformation
-Details about `lib/export_csv.py`: Safe nested field extraction from Jira issue fields, conversion to 2D row format (key, summary, status, assignee, reporter, issuetype, priority, story_points).
+
+The script flattens Jira's nested issue structure into a simple row format. It extracts common fields (key, summary, status, assignee, reporter, issue type, priority, story points) and handles missing or null values gracefully.
 
 ### Configuration Management
-Details about `lib/config.py`: Frozen dataclasses for type-safe config, environment variable loading with validation.
+
+Configuration uses immutable dataclasses and is loaded from environment variables. Missing or invalid values raise clear error messages at startup.
 
 
 ## Architecture
-Brief note on the modular structure with `lib/` package containing separate concerns (config, Jira client, Google Sheets client, data transformation).
+
+The `lib/` package separates concerns into focused modules: Jira API calls, Google Sheets operations, data transformation, and configuration handling. Each module exposes functions that are easy to test in isolation.
 
 
 ## License
