@@ -3,15 +3,14 @@ Runs tests for this webap.
 
 Usage examples:
     (all) uv run ./run_tests.py
-    (file) uv run ./run_tests.py tests.test_main
-    (class) uv run ./run_tests.py tests.test_main.TestMain
-    (method) uv run ./run_tests.py tests.test_main.TestMain.test_load_config_reads_and_normalizes_env
+    (file) uv run ./run_tests.py tests.test_config
+    (class) uv run ./run_tests.py tests.test_config.TestConfig
+    (method) uv run ./run_tests.py tests.test_config.TestConfig.test_load_config_reads_and_normalizes_env
 
     Also takes a -v or --verbose flag to increase verbosity to level 2, which yields:
     name of test being run
     the test's docstring ("Checks...) ... ...and the result (ok)
     etc...
-
 """
 
 import argparse
